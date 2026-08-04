@@ -75,10 +75,10 @@ const featuredPostWithLink = featuredPost ? {
 {listPage && featuredPostWithLink && pagination.currentPage === 1 && (
   <section class="mb-16">
     <div class="site-container">
-      <h2 class="text-3xl font-brand mb-6 text-neutral-800 dark:text-white">
+      <h2 class="text-3xl font-brand mb-6 text-neutral-800 dark:text-white text-center">
             Featured
       </h2>
-      <div class=" dark:from-neutral-900 dark:to-neutral-800 p-1 rounded-2xl ">
+      <div class="mx-auto max-w-4xl dark:from-neutral-900 dark:to-neutral-800 p-1 rounded-2xl">
         <BlogCard
           layout="horizontal"
           content={{ ...featuredPostWithLink.data, ...featuredPostWithLink }}
@@ -96,12 +96,12 @@ const featuredPostWithLink = featuredPost ? {
 
     {/* 列表页标题 */}
     {listPage && title && (
-      <div class="mx-auto">
+      <div class="mx-auto text-center">
         <h2 class="text-3xl font-brand text-neutral-800 dark:text-white">{title}</h2>
       </div>
     )}
 
-    <div class="grid gap-x-6 gap-y-10 md:grid-cols-2 xl:grid-cols-3">
+    <div class="mx-auto grid max-w-6xl gap-x-6 gap-y-10 md:grid-cols-2 xl:grid-cols-3">
       {postsWithLinks && postsWithLinks.map((post) => (
         <BlogCard
           content={{ ...post.data, ...post }}
@@ -110,11 +110,13 @@ const featuredPostWithLink = featuredPost ? {
     </div>
 
     {listPage && totalPages > 1 && (
-      <Pagination
-        collection="blog"
-        currentPage={pagination.currentPage || 1}
-        totalPages={totalPages}
-      />
+      <div class="mx-auto w-full max-w-6xl">
+        <Pagination
+          collection="blog"
+          currentPage={pagination.currentPage || 1}
+          totalPages={totalPages}
+        />
+      </div>
     )}
   </div>
 
