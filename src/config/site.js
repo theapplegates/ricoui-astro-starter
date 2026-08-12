@@ -1,8 +1,8 @@
 const SITE_URL = import.meta.env.PUBLIC_SITE_URL || "https://ricoui-astro-starter.vercel.app";
 
 export const siteConfig = {
-	title: "Design-led Astro Starter",
-	author: "",
+	title: "Paul Applegate — Post-Quantum Cryptography",
+	author: "Paul Applegate",
 	url: SITE_URL,
 	utm: {
 		source: SITE_URL,
@@ -10,15 +10,15 @@ export const siteConfig = {
 		campaign: "navigation",
 	},
 	meta: {
-		title: "Design-led Astro Starter - Astro 7 template",
+		title: "Paul Applegate · PQC Engineer & Open Source Developer",
 		description:
-			"A generic Astro 7 starter for design-driven sites, with Blog, DESIGN.md, Elements, Tailwind CSS v4, MDX, and a reusable theme system.",
+			"Post-quantum cryptography research, Rust systems programming, OpenPGP implementations, and open-source contributions from Charleston, SC.",
 		keywords:
-			"astro starter, astro 7 template, design system, tailwind css, mdx blog, website theme",
+			"post-quantum cryptography, PQC, SLH-DSA, Dilithium, XMSSMT, Sequoia-PGP, Rust, open source, cryptography",
 		image: `${SITE_URL}/assets/preview.jpg`,
 		twitterHandle: "",
 	},
 	social: {
-		github: "https://github.com/ricocc/ricoui-astro-starter",
+		github: "https://github.com/theapplegates",
 	},
 };
