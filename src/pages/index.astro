@@ -1,104 +1,229 @@
 ---
 import Layout from "@/layouts/Layout.astro";
-import HeroSection from "@/components/home/HeroSection.astro";
 import SectionHeader from "@/components/elements/SectionHeader.astro";
 import BlogSection from "@/components/sections/BlogSection.astro";
 import Button from "@/components/ui/Button.astro";
+import Badge from "@/components/ui/Badge.astro";
 import BrowserFrame from "@/components/ui/BrowserFrame.astro";
+import AccordionItem from "@/components/ui/AccordionItem.astro";
 import { siteConfig } from "@/config/site";
 import {
 	ArrowRight,
-	BookOpen,
-	Brush,
-	FilePenLine,
+	Shield,
+	Lock,
+	Key,
+	Code2,
+	GitFork,
 	FileText,
-	FolderOpen,
 	Layers,
-	LayoutTemplate,
-	Palette,
-	Rss,
-	Settings,
+	Cpu,
+	Zap,
+	BookOpen,
+	Globe,
 	Sparkles,
+	Terminal,
+	Package,
+	Brush,
+	Atom,
 } from "@lucide/astro";
 
-const starterScope = [
+const algorithms = [
 	{
-		icon: Palette,
-		title: "Theme first",
-		desc: "Global tokens define the palette, typography, radii, surfaces, and dark mode before pages start to multiply.",
+		icon: Shield,
+		name: "SLH-DSA",
+		alias: "SPHINCS+",
+		status: "NIST Standard",
+		variant: "primary",
+		desc: "Stateless hash-based signature scheme. My go-to for long-term signing — no state management headaches.",
 	},
 	{
-		icon: FileText,
-		title: "DESIGN.md included",
-		desc: "The design notes are part of the template, so human builders and AI agents can follow the same visual rules.",
-	},
-	{
-		icon: BookOpen,
-		title: "Blog ready",
-		desc: "MDX posts, RSS, pagination, article layout, table of contents, and image handling are already wired.",
+		icon: Atom,
+		name: "ML-DSA",
+		alias: "Dilithium",
+		status: "NIST Standard",
+		variant: "accent",
+		desc: "Lattice-based digital signatures. Faster than SLH-DSA with smaller keys — ideal for TLS and code signing.",
 	},
 	{
 		icon: Layers,
-		title: "Element theme",
-		desc: "Buttons, badges, cards, typography, motion, form controls, and layout primitives live in one reference page.",
+		name: "XMSSMT",
+		alias: "Multi-tree XMSS",
+		status: "RFC 8391",
+		variant: "primary",
+		desc: "Stateful hash-based scheme with multi-tree structure. Researching practical state management approaches.",
+	},
+	{
+		icon: Key,
+		name: "ML-KEM",
+		alias: "Kyber",
+		status: "NIST Standard",
+		variant: "accent",
+		desc: "Module-lattice key encapsulation. The post-quantum answer to ECDH for hybrid key exchange.",
 	},
 ];
 
-const fileMap = [
-	{ path: "src/pages/index.astro", note: "starter home" },
-	{ path: "src/pages/blog", note: "MDX blog routes" },
-	{ path: "src/pages/design.astro", note: "DESIGN.md preview" },
-	{ path: "src/pages/elements.astro", note: "theme components" },
-	{ path: "src/styles/global.css", note: "Tailwind v4 tokens" },
-	{ path: "src/config/site.js", note: "site metadata" },
+const projects = [
+	{
+		icon: Lock,
+		title: "Sequoia-PGP Contributions",
+		tag: "Rust · OpenPGP",
+		desc: "Contributing to post-quantum algorithm integration in the Sequoia OpenPGP implementation. Working toward SLH-DSA and ML-DSA support in pgp crate.",
+	},
+	{
+		icon: Code2,
+		title: "PQC Testing Frameworks",
+		tag: "Rust · WASM",
+		desc: "Building test harnesses for NIST PQC candidates. Covers known-answer tests, interoperability checks, and timing-safe implementations.",
+	},
+	{
+		icon: Globe,
+		title: "RicoUI Astro Starter",
+		tag: "Astro · Tailwind",
+		desc: "Contributing design system improvements and theme tokens to this very starter template. Design-first development meets cryptography.",
+	},
+	{
+		icon: Terminal,
+		title: "Libgcrypt PQC Research",
+		tag: "C · GnuPG",
+		desc: "Exploring Dilithium/ML-DSA integration into Libgcrypt for eventual GnuPG support. Tracking IETF OpenPGP PQC draft progress.",
+	},
 ];
 
-const workflow = [
+const stack = [
+	{ path: "lang/rust", note: "systems core" },
+	{ path: "lang/typescript", note: "web layer" },
+	{ path: "framework/astro", note: "static sites" },
+	{ path: "framework/next.js", note: "dynamic apps" },
+	{ path: "crypto/sequoia-pgp", note: "OpenPGP" },
+	{ path: "crypto/pqc-nist", note: "SLH-DSA · ML-DSA" },
+];
+
+const timeline = [
 	{
-		icon: Settings,
-		title: "Site metadata",
-		desc: "Edit src/config/site.js",
+		year: "2022",
+		title: "NIST Round 3 deep-dive",
+		desc: "Started systematically implementing and testing NIST PQC finalists — Kyber, Dilithium, SPHINCS+.",
 	},
 	{
-		icon: Palette,
-		title: "Theme tokens",
-		desc: "Tune colors in global.css and themes.css",
+		year: "2023",
+		title: "Sequoia-PGP involvement",
+		desc: "Began contributing to Sequoia-PGP, focusing on algorithm agility and post-quantum readiness.",
 	},
 	{
-		icon: FilePenLine,
-		title: "Content posts",
-		desc: "Write MDX in src/content/post",
+		year: "2024",
+		title: "NIST standards published",
+		desc: "FIPS 203/204/205 finalized. Pivoted to production-ready implementations and real-world integrations.",
 	},
 	{
-		icon: LayoutTemplate,
-		title: "Page composition",
-		desc: "Build from the Elements reference",
+		year: "2025",
+		title: "Hybrid key exchange",
+		desc: "Building hybrid classical + PQC schemes. Tracking IETF drafts for PQC in OpenPGP and TLS 1.3.",
+	},
+];
+
+const faqs = [
+	{
+		question: "Why does post-quantum cryptography matter now?",
+		answer: "\"Harvest now, decrypt later\" attacks are real. Adversaries are storing today's encrypted traffic to decrypt once a cryptographically-relevant quantum computer exists. Long-lived secrets need PQC protection today.",
+	},
+	{
+		question: "Which PQC algorithm should I use for signing?",
+		answer: "For most use-cases: ML-DSA (Dilithium) for performance-sensitive applications, SLH-DSA (SPHINCS+) when you want stateless simplicity and maximum security conservatism. Avoid XMSSMT unless you can manage state reliably.",
+	},
+	{
+		question: "Is Rust the right language for cryptography?",
+		answer: "Yes — memory safety without garbage collection makes Rust ideal for cryptographic primitives. Sequoia-PGP, dalek-cryptography, and the RustCrypto suite demonstrate this well. The borrow checker catches entire classes of vulnerabilities at compile time.",
+	},
+	{
+		question: "How do I follow your open-source work?",
+		answer: "GitHub is the best place. I'm active on the Sequoia-PGP tracker, contribute to RustCrypto, and publish notes here on the blog whenever I hit something interesting.",
 	},
 ];
 ---
 
 <Layout
-	title="Design-led Astro Starter - Astro 7 template"
-	description="A clean Astro starter with Blog, DESIGN.md, Elements, Tailwind CSS v4, MDX, and a reusable design theme."
-	keywords="astro starter, design system, tailwind css, mdx blog, website template"
+	title="Paul Applegate · PQC Engineer & Open Source Developer"
+	description="Post-quantum cryptography research, Rust systems programming, OpenPGP implementations, and open-source contributions from Charleston, SC."
+	keywords="post-quantum cryptography, PQC, SLH-DSA, Dilithium, XMSSMT, Sequoia-PGP, Rust, open source"
 >
-	<HeroSection />
 
+	<!-- ═══ HERO ═══════════════════════════════════════════════════ -->
+	<section class="relative z-20 site-container pt-16 md:pt-24 lg:pt-32">
+		<div class="grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
+			<div>
+				<div class="mb-6 flex flex-wrap gap-2">
+					<Badge variant="primary">Post-Quantum Cryptography</Badge>
+					<Badge variant="accent">Charleston, SC · Open Source</Badge>
+				</div>
+
+				<h1 class="mb-5 max-w-3xl text-4xl leading-tight md:text-5xl lg:text-6xl font-brand">
+					Building the cryptography that survives quantum computers
+				</h1>
+
+				<p class="mb-7 max-w-2xl text-base md:text-lg text-neutral-600 dark:text-neutral-300 leading-relaxed">
+					I'm Paul — a systems developer and open-source contributor specialising in post-quantum cryptographic implementations in Rust. I work on Sequoia-PGP, NIST PQC integrations, and the tools that make quantum-safe cryptography practical today.
+				</p>
+
+				<div class="flex flex-wrap gap-3">
+					<Button url="/blog" type="fill">
+						<BookOpen size={16} /> Read the Blog
+					</Button>
+					<Button url="/elements">
+						<Layers size={16} /> Design System
+					</Button>
+					<Button url={siteConfig.social.github} type="outline" target="_blank">
+						<GitFork size={16} /> GitHub
+					</Button>
+				</div>
+			</div>
+
+			<!-- Hero visual: terminal-style algorithm readout -->
+			<div class="relative">
+				<BrowserFrame url="pqc.local · algorithm-status">
+					<div class="min-h-[340px] bg-neutral-950 p-5 font-mono text-xs">
+						<p class="mb-4 text-neutral-500"># NIST PQC Standards — August 2026</p>
+						{algorithms.map((alg, i) => (
+							<div
+								class="pqc-line mb-2 flex items-center gap-3 rounded-md border border-neutral-800 bg-neutral-900/60 px-3 py-2"
+								style={`--line-delay: ${i * 110}ms`}
+							>
+								<span class="text-green-400">✓</span>
+								<span class="text-primary-light font-semibold w-20">{alg.name}</span>
+								<span class="text-neutral-400 flex-1">{alg.alias}</span>
+								<span class="rounded bg-primary/20 px-2 py-0.5 text-[10px] text-primary-light">{alg.status}</span>
+							</div>
+						))}
+						<div class="mt-4 rounded border border-dashed border-neutral-700 p-3">
+							<p class="text-neutral-500 mb-1">active research</p>
+							<p class="text-neutral-300">sequoia-pgp · libgcrypt · wasm-bindgen</p>
+							<p class="text-neutral-500 mt-2">location: charleston, sc 🌊</p>
+						</div>
+					</div>
+				</BrowserFrame>
+			</div>
+		</div>
+	</section>
+
+	<div class="site-container my-8 border-b border-dashed border-neutral-200 dark:border-neutral-700"></div>
+
+	<!-- ═══ ALGORITHMS ════════════════════════════════════════════ -->
 	<section class="site-container py-16 md:py-24">
 		<SectionHeader
-			title="Pure starter surface"
-			description="The template keeps the useful parts visible and removes product-specific demo pages, pricing copy, auth screens, and release-note filler from the public site."
+			title="Algorithms I work with"
+			description="The four NIST-standardised post-quantum primitives that form the foundation of quantum-safe cryptography. Each has trade-offs; picking the right one for the job is the craft."
 		/>
 		<div class="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-			{starterScope.map((item) => (
-				<article
-					class="rounded-xl border border-primary/10 bg-bg-secondary p-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_30px_rgba(var(--color-primary-rgb),0.08)] dark:border-neutral-700 dark:bg-bg-secondary-dark"
-				>
-					<div class="mb-4 grid h-10 w-10 place-items-center rounded-lg bg-primary/10 text-primary dark:bg-primary/20 dark:text-primary-light">
-						<item.icon class="h-5 w-5" />
+			{algorithms.map((alg) => (
+				<article class="rounded-xl border border-primary/10 bg-bg-secondary p-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_30px_rgba(var(--color-primary-rgb),0.08)] dark:border-neutral-700 dark:bg-bg-secondary-dark">
+					<div class="mb-3 flex items-start justify-between gap-3">
+						<div class="grid h-10 w-10 place-items-center rounded-lg bg-primary/10 text-primary dark:bg-primary/20 dark:text-primary-light">
+							<alg.icon class="h-5 w-5" />
+						</div>
+						<Badge variant={alg.variant}>{alg.status}</Badge>
 					</div>
-					<h3 class="mb-2 text-lg font-semibold text-neutral-800 dark:text-neutral-100">{item.title}</h3>
-					<p class="text-sm leading-relaxed text-neutral-500 dark:text-neutral-400">{item.desc}</p>
+					<h3 class="mb-0.5 text-lg font-semibold text-neutral-800 dark:text-neutral-100">{alg.name}</h3>
+					<p class="mb-3 font-mono text-xs text-neutral-400">{alg.alias}</p>
+					<p class="text-sm leading-relaxed text-neutral-500 dark:text-neutral-400">{alg.desc}</p>
 				</article>
 			))}
 		</div>
@@ -106,36 +231,45 @@ const workflow = [
 
 	<div class="site-container my-4 border-b border-dashed border-neutral-200 dark:border-neutral-700"></div>
 
+	<!-- ═══ PROJECTS + STACK ═════════════════════════════════════ -->
 	<section class="site-container py-16 md:py-24">
-		<div class="grid items-start gap-8 lg:grid-cols-[0.95fr_1.05fr]">
+		<div class="grid items-start gap-10 lg:grid-cols-[1fr_0.85fr]">
 			<div>
 				<div class="mb-4 inline-flex items-center gap-2 rounded-md border border-dashed border-primary/25 bg-primary/5 px-3 py-1 text-xs font-medium text-primary">
-					<Brush class="h-3.5 w-3.5" /> Theme workflow
+					<Code2 class="h-3.5 w-3.5" /> Open-source work
 				</div>
-				<h2 class="mb-4 max-w-xl text-3xl font-brand md:text-4xl">Build from the design, then fill in the product</h2>
-				<p class="max-w-2xl text-neutral-600 leading-relaxed dark:text-neutral-300">
-					This starter is intentionally quiet: it gives you a polished visual system, a content layer, and a component reference. Your app, brand, product screenshots, and copy can take over from there.
+				<h2 class="mb-4 max-w-xl text-3xl font-brand md:text-4xl">What I'm building and contributing to</h2>
+				<p class="mb-7 max-w-2xl text-neutral-600 leading-relaxed dark:text-neutral-300">
+					Most of my work lives at the intersection of cryptographic correctness and developer ergonomics — making post-quantum primitives approachable without sacrificing security.
 				</p>
-				<div class="mt-7 flex flex-wrap gap-3">
-					<Button url="/design" type="fill">
-						View DESIGN.md <ArrowRight size={16} />
-					</Button>
-					<Button url="/elements">
-						Open Elements
-					</Button>
+				<div class="grid gap-4 sm:grid-cols-2">
+					{projects.map((proj) => (
+						<div class="rounded-xl border border-dashed border-primary/20 bg-bg-secondary p-5 transition-colors duration-200 hover:border-primary/35 hover:bg-primary/5 dark:border-neutral-700 dark:bg-bg-secondary-dark dark:hover:border-primary/40 dark:hover:bg-primary/10">
+							<div class="mb-3 flex items-center gap-2">
+								<span class="grid h-8 w-8 flex-none place-items-center rounded-lg bg-primary/10 text-primary dark:bg-primary/20 dark:text-primary-light">
+									<proj.icon class="h-4 w-4" />
+								</span>
+								<span class="rounded-md bg-primary/5 px-2 py-0.5 font-mono text-[10px] text-primary dark:bg-primary/10 dark:text-primary-light">{proj.tag}</span>
+							</div>
+							<h3 class="mb-2 text-sm font-semibold text-neutral-800 dark:text-neutral-100">{proj.title}</h3>
+							<p class="text-xs leading-relaxed text-neutral-500 dark:text-neutral-400">{proj.desc}</p>
+						</div>
+					))}
 				</div>
 			</div>
 
-			<BrowserFrame url="starter/theme-map" className="w-full">
+			<!-- Tech stack browser frame -->
+			<BrowserFrame url="pqc.local · tech-stack" className="w-full">
 				<div class="grid gap-3 p-4 md:p-5">
-					{fileMap.map((file) => (
+					<p class="text-[10px] uppercase tracking-[0.16em] text-neutral-400">Current Stack</p>
+					{stack.map((item) => (
 						<div class="grid grid-cols-[1fr_auto] items-center gap-4 rounded-lg border border-primary/10 bg-bg-primary/50 px-4 py-3 dark:border-neutral-700 dark:bg-neutral-800/40">
 							<div class="flex min-w-0 items-center gap-3">
-								<FolderOpen class="h-4 w-4 flex-none text-primary" />
-								<span class="truncate font-mono text-xs text-neutral-700 dark:text-neutral-200">{file.path}</span>
+								<Package class="h-4 w-4 flex-none text-primary" />
+								<span class="truncate font-mono text-xs text-neutral-700 dark:text-neutral-200">{item.path}</span>
 							</div>
 							<span class="rounded-md bg-primary/5 px-2 py-1 text-[10px] text-primary dark:bg-primary/10 dark:text-primary-light">
-								{file.note}
+								{item.note}
 							</span>
 						</div>
 					))}
@@ -144,26 +278,27 @@ const workflow = [
 		</div>
 	</section>
 
+	<div class="site-container my-4 border-b border-dashed border-neutral-200 dark:border-neutral-700"></div>
+
+	<!-- ═══ TIMELINE ════════════════════════════════════════════ -->
 	<section class="site-container py-16 md:py-24">
 		<SectionHeader
-			title="A short path from clone to custom site"
-			description="Most first edits should happen in four places. The rest of the starter stays out of your way."
+			title="PQC research timeline"
+			description="The arc from early algorithm exploration to shipping production-grade post-quantum implementations."
 		/>
 		<div class="mt-8 grid gap-4 md:grid-cols-4">
-			{workflow.map((step, index) => (
-				<div
-					class="group rounded-xl border border-dashed border-primary/20 bg-bg-secondary p-5 transition-colors duration-200 hover:border-primary/35 hover:bg-primary/5 dark:border-neutral-700 dark:bg-bg-secondary-dark dark:hover:border-primary/40 dark:hover:bg-primary/10"
-				>
+			{timeline.map((step, index) => (
+				<div class="group rounded-xl border border-dashed border-primary/20 bg-bg-secondary p-5 transition-colors duration-200 hover:border-primary/35 hover:bg-primary/5 dark:border-neutral-700 dark:bg-bg-secondary-dark dark:hover:border-primary/40 dark:hover:bg-primary/10">
 					<div class="mb-5 flex items-start justify-between gap-4">
 						<span class="grid h-10 w-10 flex-none place-items-center rounded-lg bg-primary/10 text-primary transition-colors duration-200 group-hover:bg-primary group-hover:text-btn-primary-text dark:bg-primary/20 dark:text-primary-light">
-							<step.icon class="h-5 w-5" />
+							<Zap class="h-5 w-5" />
 						</span>
 						<span class="font-mono text-xs font-medium text-primary/75 dark:text-primary-light">
-							{String(index + 1).padStart(2, "0")}
+							{step.year}
 						</span>
 					</div>
 					<h3 class="mb-2 text-base font-semibold text-neutral-800 dark:text-neutral-100">{step.title}</h3>
-					<p class="font-mono text-xs leading-relaxed text-neutral-500 dark:text-neutral-400">{step.desc}</p>
+					<p class="text-xs leading-relaxed text-neutral-500 dark:text-neutral-400">{step.desc}</p>
 				</div>
 			))}
 		</div>
@@ -171,35 +306,91 @@ const workflow = [
 
 	<div class="site-container my-4 border-b border-dashed border-neutral-200 dark:border-neutral-700"></div>
 
+	<!-- ═══ BLOG ════════════════════════════════════════════════ -->
 	<section class="py-16 md:py-24">
 		<BlogSection
-			title="Starter notes"
-			description="Use the Blog as documentation, release writing, essays, or product updates."
+			title="Field notes"
+			description="Writing on post-quantum cryptography, Rust systems programming, and open-source tooling."
 			limit={3}
 		/>
 	</section>
 
+	<div class="site-container my-4 border-b border-dashed border-neutral-200 dark:border-neutral-700"></div>
+
+	<!-- ═══ FAQ ACCORDION ════════════════════════════════════════ -->
+	<section class="site-container py-16 md:py-24">
+		<div class="grid items-start gap-12 lg:grid-cols-[0.45fr_0.55fr]">
+			<div>
+				<div class="mb-4 inline-flex items-center gap-2 rounded-md border border-dashed border-primary/25 bg-primary/5 px-3 py-1 text-xs font-medium text-primary">
+					<BookOpen class="h-3.5 w-3.5" /> Common questions
+				</div>
+				<h2 class="mb-4 text-3xl font-brand md:text-4xl">PQC questions I get asked a lot</h2>
+				<p class="text-neutral-600 leading-relaxed dark:text-neutral-300">
+					A pragmatic take on post-quantum cryptography — no hype, just the engineering tradeoffs that matter.
+				</p>
+				<div class="mt-6">
+					<Button url="/blog" type="fill">
+						More in the blog <ArrowRight size={16} />
+					</Button>
+				</div>
+			</div>
+			<div class="space-y-3">
+				{faqs.map((faq, i) => (
+					<AccordionItem
+						question={faq.question}
+						answer={faq.answer}
+						open={i === 0}
+					/>
+				))}
+			</div>
+		</div>
+	</section>
+
+	<!-- ═══ CTA ═════════════════════════════════════════════════ -->
 	<section class="site-container py-12 md:py-20">
-		<div
-			class="rounded-xl border border-primary/10 bg-bg-secondary p-7 text-center dark:border-neutral-700 dark:bg-bg-secondary-dark md:p-10"
-		>
+		<div class="rounded-xl border border-primary/10 bg-bg-secondary p-7 text-center dark:border-neutral-700 dark:bg-bg-secondary-dark md:p-10">
 			<div class="mb-4 flex justify-center">
 				<div class="grid h-12 w-12 place-items-center rounded-xl bg-accent/30 text-neutral-800 dark:bg-accent/20 dark:text-neutral-100">
 					<Sparkles class="h-5 w-5" />
 				</div>
 			</div>
-			<h2 class="mx-auto mb-4 max-w-2xl text-3xl font-brand md:text-4xl">Start with the theme, ship your own thing</h2>
+			<h2 class="mx-auto mb-4 max-w-2xl text-3xl font-brand md:text-4xl">The quantum threat is real. The solutions are ready.</h2>
 			<p class="mx-auto mb-7 max-w-2xl text-neutral-600 dark:text-neutral-300">
-				Clone the starter, keep the design language, and replace the sample writing with your own project structure and content.
+				If you're working on PQC integration, OpenPGP tooling, or Rust cryptographic systems — I'd love to compare notes. Find me on GitHub or in the blog comments.
 			</p>
 			<div class="flex flex-wrap justify-center gap-3">
 				<Button url={siteConfig.social.github} type="fill" target="_blank">
-					Get Template <ArrowRight size={16} />
+					<GitFork size={16} /> View GitHub <ArrowRight size={16} />
 				</Button>
-				<Button url="/rss.xml">
-					<Rss size={16} /> RSS
+				<Button url="/blog">
+					<FileText size={16} /> Read the Blog
 				</Button>
 			</div>
 		</div>
 	</section>
+
 </Layout>
+
+<style>
+	.pqc-line {
+		animation: line-fade-in 480ms cubic-bezier(0.4, 0, 0.2, 1) backwards;
+		animation-delay: var(--line-delay, 0ms);
+	}
+
+	@keyframes line-fade-in {
+		from {
+			opacity: 0;
+			transform: translateX(-6px);
+		}
+		to {
+			opacity: 1;
+			transform: translateX(0);
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.pqc-line {
+			animation: none !important;
+		}
+	}
+</style>
