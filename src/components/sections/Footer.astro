@@ -6,15 +6,15 @@ import { siteConfig } from "@/config/site.js";
 const currentYear = new Date().getFullYear();
 const templateVersion = "v1.0.0";
 const footerLinks = {
-	starter: [
+	field: [
 		{ name: "Home", url: "/" },
-		{ name: "Blog", url: "/blog" },
-		{ name: "DESIGN.md", url: "/design" },
-		{ name: "Elements", url: "/elements" },
+		{ name: "Mission Log", url: "/blog" },
+		{ name: "About", url: "/about" },
+		{ name: "Contact", url: "/contact" },
 	],
-	resources: [
+	channels: [
 		{ name: "RSS", url: "/rss.xml" },
-		{ name: "Source repository", url: siteConfig.social.github },
+		{ name: "GitHub", url: siteConfig.social.github },
 		{ name: "MIT License", url: `${siteConfig.social.github}/blob/main/LICENSE` },
 	],
 };
@@ -26,32 +26,32 @@ const footerLinks = {
 			<div class="max-w-sm">
 				<Logo />
 				<p class="mt-4 text-sm leading-relaxed text-neutral-500 dark:text-neutral-400">
-					A generic Astro 7 starter with Blog, DESIGN.md, Elements, Tailwind CSS v4, MDX, and a reusable theme system.
+					Dossiers on Bond films and other classified matters — shaken, not stirred, from Charleston, SC.
 				</p>
 			</div>
 
 			<div class="grid grid-cols-2 gap-8 md:gap-12">
 				<div>
-					<h4 class="mb-4 text-sm font-semibold text-neutral-800 dark:text-neutral-200">Starter</h4>
+					<h4 class="mb-4 text-sm font-semibold text-neutral-800 dark:text-neutral-200">Field Operations</h4>
 					<ul class="space-y-3">
-						{footerLinks.starter.map((link) => <li><a href={link.url} class="text-sm text-neutral-500 transition-colors duration-200 hover:text-primary dark:text-neutral-400 dark:hover:text-primary-light">{link.name}</a></li>)}
+						{footerLinks.field.map((link) => <li><a href={link.url} class="text-sm text-neutral-500 transition-colors duration-200 hover:text-primary dark:text-neutral-400 dark:hover:text-primary-light">{link.name}</a></li>)}
 					</ul>
 				</div>
 				<div>
-					<h4 class="mb-4 text-sm font-semibold text-neutral-800 dark:text-neutral-200">Resources</h4>
+					<h4 class="mb-4 text-sm font-semibold text-neutral-800 dark:text-neutral-200">Channels</h4>
 					<ul class="space-y-3">
-						{footerLinks.resources.map((link) => <li><a href={link.url} class="text-sm text-neutral-500 transition-colors duration-200 hover:text-primary dark:text-neutral-400 dark:hover:text-primary-light">{link.name}</a></li>)}
+						{footerLinks.channels.map((link) => <li><a href={link.url} class="text-sm text-neutral-500 transition-colors duration-200 hover:text-primary dark:text-neutral-400 dark:hover:text-primary-light">{link.name}</a></li>)}
 					</ul>
 				</div>
 			</div>
 		</div>
 
 		<div class="flex flex-col items-center justify-between gap-4 border-t border-dashed border-primary/10 pt-8 dark:border-primary-dark/10 sm:flex-row">
-			<p class="text-sm text-neutral-400 dark:text-neutral-500">© {currentYear} · Released under the MIT License.</p>
+			<p class="text-sm text-neutral-400 dark:text-neutral-500">© {currentYear} {siteConfig.author} · Licensed to blog.</p>
 			<div class="flex items-center gap-4">
 				<span class="inline-flex items-center gap-2 text-xs text-neutral-400 dark:text-neutral-500">
 					<span class="inline-flex items-center gap-1.5 rounded-md border border-dashed border-primary/30 px-2 py-0.5 text-primary/80"><span class="h-1.5 w-1.5 rounded-full bg-primary"></span>{templateVersion}</span>
-					<span>Astro 7 starter</span>
+					<span>Shaken, not stirred</span>
 				</span>
 				<a href={siteConfig.social.github} target="_blank" class="text-xs font-medium text-neutral-400 transition-colors hover:text-primary dark:text-neutral-500 dark:hover:text-primary-light">View source</a>
 			</div>

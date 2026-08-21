@@ -1,56 +1,83 @@
 ---
 import Layout from "@/layouts/Layout.astro";
-import PageHeader from "@/components/elements/PageHeader.astro";
-import BlogSection from "@/components/sections/BlogSection.astro";
+import BlogCard from "@/components/cards/BlogCard.astro";
+import BlogSidebar from "@/components/widgets/BlogSidebar.astro";
+import Pagination from "@/components/widgets/Pagination.astro";
+import Badge from "@/components/ui/Badge.astro";
 import { getCollection } from "astro:content";
 
 export const POSTS_PER_PAGE = 6;
 
 export async function getStaticPaths() {
-  const allPosts = await getCollection("post");
+	// NOTE: getStaticPaths runs in its own scope — keep this sort logic
+	// in sync with the page-level sort below.
+	const allPosts = [...(await getCollection("post"))].sort((a, b) =>
+		a.data.featured === b.data.featured
+			? b.data.publishDate.valueOf() - a.data.publishDate.valueOf()
+			: b.data.featured
+				? 1
+				: -1
+	);
+	const totalPages = Math.ceil(allPosts.length / POSTS_PER_PAGE);
 
-  let posts = allPosts.sort(
-    (a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf()
-  );
-
-  const featuredPost = posts.find((post) => post.data.featured);
-  if (featuredPost) {
-    posts = posts.filter((post) => post.data.featured !== true);
-  }
-
-  const totalPages = Math.ceil(posts.length / POSTS_PER_PAGE);
-
-  return Array.from({ length: totalPages }, (_, i) => {
-    const page = i + 1;
-    return {
-      params: { page: page.toString() },
-      props: { page: page.toString() }
-    };
-  });
+	return Array.from({ length: Math.max(totalPages - 1, 0) }, (_, i) => {
+		const page = i + 2;
+		return {
+			params: { page: page.toString() },
+			props: { page: page.toString() },
+		};
+	});
 }
 
 const { page } = Astro.props;
 const currentPage = parseInt(page);
+
+const allPosts = [...(await getCollection("post"))].sort((a, b) =>
+	a.data.featured === b.data.featured
+		? b.data.publishDate.valueOf() - a.data.publishDate.valueOf()
+		: b.data.featured
+			? 1
+			: -1
+);
+const totalPages = Math.ceil(allPosts.length / POSTS_PER_PAGE);
+const posts = allPosts.slice((currentPage - 1) * POSTS_PER_PAGE, currentPage * POSTS_PER_PAGE);
 ---
 
-<Layout title="Blog - Design-led Astro Starter" description="Notes, articles, and documentation for the generic starter.">
-  <section class="relative z-20 container mx-auto my-12 px-7 lg:px-0">
-    <PageHeader
-      title="Blog"
-      description="Notes, articles, and documentation for the starter."
-    />
-  </section>
-  <section class="relative z-20 mx-auto my-12 px-7 lg:px-0">
-    <div class="mt-12">
-      <BlogSection
-        title="All Articles"
-        listPage={true}
-        pagination={{
-          enable: true,
-          currentPage: currentPage
-        }}
-        postsPerPage={POSTS_PER_PAGE}
-      />
-    </div>
-  </section>
+<Layout title={`Mission Log — Page ${currentPage} — Paul Applegate`} description="Every Bond film, reviewed and filed. Villains graded, gadgets itemised, Bond girls duly noted.">
+	<section class="relative z-20 site-container py-8 md:py-12">
+		<!-- Page header -->
+		<div class="mb-10 md:mb-14">
+			<div class="mb-4 flex flex-wrap items-center gap-2">
+				<Badge variant="primary">Declassified</Badge>
+				<Badge variant="accent">Page {currentPage} of {totalPages}</Badge>
+			</div>
+			<h1 class="font-brand text-4xl text-neutral-800 dark:text-neutral-100 sm:text-5xl">Mission Log</h1>
+			<p class="mt-4 max-w-2xl text-base leading-7 text-neutral-600 dark:text-neutral-300">
+				Every Bond film, reviewed and filed. Villains graded, gadgets itemised, Bond girls duly noted. Reading these dossiers does not require security clearance.
+			</p>
+			<div class="mt-8 border-b border-dashed border-neutral-200 dark:border-neutral-700"></div>
+		</div>
+
+		<div class="grid gap-10 lg:grid-cols-[260px_1fr] lg:gap-12">
+			<!-- Main column: post stream -->
+			<div class="space-y-10 lg:col-start-2 lg:row-start-1">
+				{posts.map((post) => (
+					<BlogCard
+						layout="horizontal"
+						content={{ ...post.data, ...post, link: `/blog/${post.id}` }}
+					/>
+				))}
+
+				{totalPages > 1 && (
+					<Pagination collection="blog" currentPage={currentPage} totalPages={totalPages} />
+				)}
+			</div>
+
+			<!-- Sidebar (left, sticky on desktop; below the stream on mobile) -->
+			<div class="lg:col-start-1 lg:row-start-1">
+				<BlogSidebar />
+			</div>
+		</div>
+	</section>
 </Layout>
+```

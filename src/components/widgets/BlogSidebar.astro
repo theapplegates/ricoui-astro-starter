@@ -1,0 +1,103 @@
+---
+import { getCollection } from "astro:content";
+import Logo from "@/components/ui/Logo.astro";
+import Badge from "@/components/ui/Badge.astro";
+import { siteConfig } from "@/config/site";
+import menus from "@/collections/menu.json";
+import { ChevronRight, Fingerprint, MapPin, Rss, Compass, Archive, Tags } from "@lucide/astro";
+
+type MenuItem = { name: string; url?: string };
+
+const allPosts = await getCollection("post");
+const recentPosts = [...allPosts]
+	.sort((a, b) => a.data.featured === b.data.featured
+		? b.data.publishDate.valueOf() - a.data.publishDate.valueOf()
+		: (b.data.featured ? 1 : -1))
+	.slice(0, 3);
+
+const tags = [...new Set(allPosts.flatMap((post) => post.data.tags ?? []))];
+
+const cardClass =
+	"rounded-xl border border-dashed border-primary/20 bg-bg-secondary p-5 dark:border-neutral-700 dark:bg-bg-secondary-dark";
+const headingClass =
+	"mb-3 flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.14em] text-neutral-400 dark:text-neutral-500";
+---
+
+<aside class="space-y-5 lg:sticky lg:top-28 lg:self-start">
+	<!-- Agent Profile -->
+	<div class={cardClass} data-aos="fade-up-xs" data-aos-once="true">
+		<h3 class={headingClass}><Fingerprint class="h-3.5 w-3.5" /> Agent Profile</h3>
+		<div class="mb-3 flex items-center gap-3">
+			<Logo />
+			<div>
+				<p class="text-sm font-semibold text-neutral-800 dark:text-neutral-100">{siteConfig.author}</p>
+				<p class="font-mono text-[11px] text-neutral-400">codename: APPLGATE-007</p>
+			</div>
+		</div>
+		<p class="mb-4 text-xs leading-relaxed text-neutral-500 dark:text-neutral-400">
+			Reviews Bond films. Orders martinis correctly. Writes it all down, shaken not stirred.
+		</p>
+		<a href="/about" class="group inline-flex items-center gap-1.5 text-xs font-semibold text-primary transition-colors dark:text-primary-light">
+			Full profile
+			<ChevronRight class="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
+		</a>
+	</div>
+
+	<!-- Field Operations (site links) -->
+	<nav class={cardClass} aria-label="Site links" data-aos="fade-up-xs" data-aos-once="true" data-aos-delay="80">
+		<h3 class={headingClass}><Compass class="h-3.5 w-3.5" /> Field Operations</h3>
+		<ul class="space-y-1">
+			{(menus as MenuItem[]).map((item) => (
+				<li>
+					<a
+						href={item.url}
+						class="group flex items-center justify-between rounded-lg px-2.5 py-2 text-sm text-neutral-600 transition-colors duration-150 hover:bg-primary/5 hover:text-primary dark:text-neutral-300 dark:hover:bg-primary/10 dark:hover:text-primary-light"
+					>
+						<span>{item.name}</span>
+						<ChevronRight class="h-3.5 w-3.5 text-neutral-300 transition-all duration-150 group-hover:translate-x-0.5 group-hover:text-primary dark:text-neutral-600" />
+					</a>
+				</li>
+			))}
+		</ul>
+	</nav>
+
+	<!-- Recent Dossiers -->
+	<div class={cardClass} data-aos="fade-up-xs" data-aos-once="true" data-aos-delay="160">
+		<h3 class={headingClass}><Archive class="h-3.5 w-3.5" /> Recent Dossiers</h3>
+		<ul class="space-y-3">
+			{recentPosts.map((post) => (
+				<li class="border-b border-dashed border-neutral-200 pb-3 last:border-0 last:pb-0 dark:border-neutral-700">
+					<a href={`/blog/${post.id}`} class="group block">
+						<p class="text-sm font-medium leading-snug text-neutral-700 transition-colors group-hover:text-primary dark:text-neutral-200 dark:group-hover:text-primary-light">
+							{post.data.title}
+						</p>
+						<p class="mt-1 font-mono text-[11px] text-neutral-400">
+							{post.data.publishDate.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })}
+						</p>
+					</a>
+				</li>
+			))}
+		</ul>
+	</div>
+
+	<!-- Tags -->
+	{tags.length > 0 && (
+		<div class={cardClass} data-aos="fade-up-xs" data-aos-once="true" data-aos-delay="240">
+			<h3 class={headingClass}><Tags class="h-3.5 w-3.5" /> Classification</h3>
+			<div class="flex flex-wrap gap-1.5">
+				{tags.map((tag) => <Badge variant="neutral" size="sm">{tag}</Badge>)}
+			</div>
+		</div>
+	)}
+
+	<!-- Safehouse -->
+	<div class={cardClass} data-aos="fade-up-xs" data-aos-once="true" data-aos-delay="320">
+		<h3 class={headingClass}><MapPin class="h-3.5 w-3.5" /> Safehouse</h3>
+		<p class="text-xs leading-relaxed text-neutral-500 dark:text-neutral-400">
+			Charleston, South Carolina. Approach quietly. Knock twice.
+		</p>
+		<a href="/rss.xml" class="group mt-3 inline-flex items-center gap-1.5 text-xs font-semibold text-primary dark:text-primary-light">
+			<Rss class="h-3.5 w-3.5" /> Subscribe to transmissions
+		</a>
+	</div>
+</aside>

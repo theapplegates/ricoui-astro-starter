@@ -4,8 +4,16 @@
 		"url": "/"
 	},
 	{
-		"name": "Blog",
+		"name": "Mission Log",
 		"url": "/blog"
+	},
+	{
+		"name": "About",
+		"url": "/about"
+	},
+	{
+		"name": "Contact",
+		"url": "/contact"
 	},
 	{
 		"name": "Design",

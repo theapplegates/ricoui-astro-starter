@@ -1,0 +1,114 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import PageHeader from "@/components/elements/PageHeader.astro";
+import Button from "@/components/ui/Button.astro";
+import Badge from "@/components/ui/Badge.astro";
+import { siteConfig } from "@/config/site";
+import { GitFork, Martini, Eye, ArrowRight } from "@lucide/astro";
+
+const gadgets = [
+	{ name: "Astro + Tailwind", note: "the site you're reading" },
+	{ name: "Rust", note: "when the stakes are real" },
+	{ name: "TypeScript", note: "for civilised company" },
+	{ name: "MDX", note: "the dossier format of choice" },
+];
+
+const aliases = ["Paul Applegate", "theapplegates", "APPLGATE-007"];
+
+const facts = [
+	{ label: "Base of operations", value: "Charleston, SC" },
+	{ label: "Drink order", value: "Shaken, obviously" },
+	{ label: "Preferred Bond", value: "Depends on the decade" },
+	{ label: "Security clearance", value: "Blog-level" },
+];
+---
+
+<Layout
+	title="Agent Profile — Paul Applegate"
+	description="Paul Applegate: Bond film reviewer, software developer, and self-appointed custodian of the 007 canon, based in Charleston, SC."
+>
+	<section class="relative z-20 site-container py-8 md:py-12">
+		<PageHeader
+			title="Agent Profile"
+			description="Declassified for your convenience. Handle with care — the man bruises easily, the opinions do not."
+			tags={["Licensed to Blog", "Charleston, SC", "Shaken, never stirred"]}
+			className="!text-left [&>*]:!text-left [&>div]:!m-0 [&>div]:!max-w-2xl"
+		/>
+
+		<!-- Dossier card -->
+		<div class="grid gap-10 lg:grid-cols-[1fr_340px] lg:gap-12">
+			<div class="space-y-10 max-w-3xl">
+				<div data-aos="fade-up-xs" data-aos-once="true">
+					<div class="mb-4 inline-flex items-center gap-2 rounded-md border border-dashed border-primary/25 bg-primary/5 px-3 py-1 text-xs font-medium text-primary">
+						<Eye class="h-3.5 w-3.5" /> Eyes only
+					</div>
+					<h2 class="mb-4 text-2xl font-brand md:text-3xl">The short version</h2>
+					<p class="leading-relaxed text-neutral-600 dark:text-neutral-300">
+						I'm Paul — a developer with an unreasonable fondness for six decades of James Bond films. This site is where I keep the mission log: one film at a time, every villain graded, every gadget itemised, every Bond girl given her due. No affiliation with EON Productions, MI6, or anyone who would ever trust me with a real secret.
+					</p>
+					<p class="mt-4 leading-relaxed text-neutral-600 dark:text-neutral-300">
+						When I'm not rewatching a ski chase I can narrate frame-by-frame, I build things for the web and occasionally write software in Rust, mostly so the tuxedo jokes land harder.
+					</p>
+				</div>
+
+				<div data-aos="fade-up-xs" data-aos-once="true">
+					<h2 class="mb-4 text-2xl font-brand md:text-3xl">Known aliases</h2>
+					<div class="flex flex-wrap gap-2">
+						{aliases.map((a) => <Badge variant="neutral" size="lg">{a}</Badge>)}
+					</div>
+					<p class="mt-3 text-xs text-neutral-400 dark:text-neutral-500">
+						If you see any of these loitering near a cinema, that's me.
+					</p>
+				</div>
+
+				<div data-aos="fade-up-xs" data-aos-once="true">
+					<h2 class="mb-4 text-2xl font-brand md:text-3xl">Gadgets</h2>
+					<div class="grid gap-3 sm:grid-cols-2">
+						{gadgets.map((g) => (
+							<div class="flex items-center justify-between gap-4 rounded-lg border border-dashed border-primary/20 bg-bg-secondary px-4 py-3 dark:border-neutral-700 dark:bg-bg-secondary-dark">
+								<span class="text-sm font-medium text-neutral-700 dark:text-neutral-200">{g.name}</span>
+								<span class="rounded-md bg-primary/5 px-2 py-1 text-[10px] text-primary dark:bg-primary/10 dark:text-primary-light">{g.note}</span>
+							</div>
+						))}
+					</div>
+				</div>
+
+				<div class="flex flex-wrap gap-3">
+					<Button url="/blog" type="fill">
+						<ArrowRight size={16} /> Read the Mission Log
+					</Button>
+					<Button url={siteConfig.social.github} type="outline" target="_blank">
+						<GitFork size={16} /> GitHub
+					</Button>
+				</div>
+			</div>
+
+			<!-- Fact sheet -->
+			<aside class="lg:sticky lg:top-28 lg:self-start">
+				<div
+					class="rotate-1 rounded-xl border border-dashed border-primary/25 bg-bg-secondary p-6 shadow-sm transition-transform duration-300 hover:rotate-0 dark:border-neutral-700 dark:bg-bg-secondary-dark"
+					data-aos="fade-up-xs"
+					data-aos-once="true"
+					data-aos-delay="150"
+				>
+					<div class="mb-4 flex items-center justify-between border-b border-dashed border-neutral-200 pb-4 dark:border-neutral-700">
+						<span class="text-[11px] font-medium uppercase tracking-[0.16em] text-neutral-400 dark:text-neutral-500">Fact sheet</span>
+						<span class="rounded bg-accent/25 px-2 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-wide text-neutral-800 dark:bg-accent/15 dark:text-accent">Classified</span>
+					</div>
+					<dl class="space-y-4">
+						{facts.map((f) => (
+							<div>
+								<dt class="text-[11px] uppercase tracking-[0.12em] text-neutral-400 dark:text-neutral-500">{f.label}</dt>
+								<dd class="mt-0.5 text-sm font-medium text-neutral-800 dark:text-neutral-100">{f.value}</dd>
+							</div>
+						))}
+					</dl>
+					<div class="mt-6 flex items-center gap-2 border-t border-dashed border-neutral-200 pt-4 text-xs text-neutral-400 dark:border-neutral-700 dark:text-neutral-500">
+						<Martini class="h-3.5 w-3.5" />
+						Verified by Q Branch (not really)
+					</div>
+				</div>
+			</aside>
+		</div>
+	</section>
+</Layout>

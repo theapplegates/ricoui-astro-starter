@@ -1,0 +1,149 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import PageHeader from "@/components/elements/PageHeader.astro";
+import Button from "@/components/ui/Button.astro";
+import Badge from "@/components/ui/Badge.astro";
+import { siteConfig } from "@/config/site";
+import { GitFork, Mail, Rss, RadioTower, Lock } from "@lucide/astro";
+
+const channels = [
+	{
+		icon: GitFork,
+		name: "GitHub",
+		desc: "Dead drops welcome. Issues, pull requests, or just a nod from across the repository.",
+		url: siteConfig.social.github,
+		label: "github.com/theapplegates",
+		external: true,
+	},
+	{
+		icon: Mail,
+		name: "Email",
+		desc: "The direct line. Response time varies with where the film queue currently stands.",
+		url: "mailto:paul@example.com",
+		label: "paul@example.com",
+		external: false,
+	},
+	{
+		icon: Rss,
+		name: "RSS",
+		desc: "Encrypted transmissions, delivered straight to your reader. Well, syndicated — close enough.",
+		url: "/rss.xml",
+		label: "/rss.xml",
+		external: false,
+	},
+];
+---
+
+<Layout
+	title="Contact HQ — Paul Applegate"
+	description="Reach Paul Applegate: GitHub, email, or RSS. Dead drops welcome; doomsday devices will be politely declined."
+>
+	<section class="relative z-20 site-container py-8 md:py-12">
+		<PageHeader
+			title="Contact HQ"
+			description="Open a channel. Dead drops welcome; doomsday devices will be politely declined."
+			tags={["GitHub", "Email", "RSS"]}
+			className="!text-left [&>*]:!text-left [&>div]:!m-0 [&>div]:!max-w-2xl"
+		/>
+
+		<div class="grid gap-10 lg:grid-cols-[1fr_380px] lg:gap-12">
+			<div class="max-w-3xl space-y-10">
+				<!-- Channels -->
+				<div class="space-y-4" data-aos="fade-up-xs" data-aos-once="true">
+					{channels.map((c) => (
+						<a
+							href={c.url}
+							target={c.external ? "_blank" : undefined}
+							class="group flex items-start gap-4 rounded-xl border border-dashed border-primary/20 bg-bg-secondary p-5 transition-colors duration-200 hover:border-primary/35 hover:bg-primary/5 dark:border-neutral-700 dark:bg-bg-secondary-dark dark:hover:border-primary/40 dark:hover:bg-primary/10"
+						>
+							<span class="grid h-10 w-10 flex-none place-items-center rounded-lg bg-primary/10 text-primary transition-colors duration-200 group-hover:bg-primary group-hover:text-btn-primary-text dark:bg-primary/20 dark:text-primary-light">
+								<c.icon class="h-5 w-5" />
+							</span>
+							<span class="min-w-0">
+								<span class="flex items-center gap-2">
+									<span class="text-sm font-semibold text-neutral-800 dark:text-neutral-100">{c.name}</span>
+									<span class="font-mono text-[11px] text-neutral-400">{c.label}</span>
+								</span>
+								<span class="mt-1 block text-xs leading-relaxed text-neutral-500 dark:text-neutral-400">{c.desc}</span>
+							</span>
+						</a>
+					))}
+				</div>
+
+				<!-- Demo form (stationery only) -->
+				<div
+					class="rounded-xl border border-dashed border-primary/20 bg-bg-secondary p-6 dark:border-neutral-700 dark:bg-bg-secondary-dark"
+					data-aos="fade-up-xs"
+					data-aos-once="true"
+					data-aos-delay="120"
+				>
+					<div class="mb-3 flex items-center gap-2">
+						<Lock class="h-4 w-4 text-primary" />
+						<h2 class="text-lg font-brand">Transmit a message</h2>
+						<Badge variant="neutral" size="sm">Demo</Badge>
+					</div>
+					<p class="mb-5 text-xs leading-relaxed text-neutral-500 dark:text-neutral-400">
+						This form is display-only — the safe house does not accept inbound transmissions through it. Use one of the channels above instead.
+					</p>
+					<div class="grid gap-4 sm:grid-cols-2">
+						<div>
+							<label class="mb-1.5 block text-xs font-medium text-neutral-500 dark:text-neutral-400" for="contact-codename">Codename</label>
+							<input
+								id="contact-codename"
+								type="text"
+								disabled
+								placeholder="e.g. Goldeneye"
+								class="w-full rounded-lg border border-dashed border-primary/20 bg-bg-primary/60 px-3 py-2.5 text-sm text-neutral-700 placeholder:text-neutral-400 dark:border-neutral-700 dark:bg-bg-primary-dark/50 dark:text-neutral-200"
+							/>
+						</div>
+						<div>
+							<label class="mb-1.5 block text-xs font-medium text-neutral-500 dark:text-neutral-400" for="contact-channel">Return channel</label>
+							<input
+								id="contact-channel"
+								type="email"
+								disabled
+								placeholder="you@safehouse.example"
+								class="w-full rounded-lg border border-dashed border-primary/20 bg-bg-primary/60 px-3 py-2.5 text-sm text-neutral-700 placeholder:text-neutral-400 dark:border-neutral-700 dark:bg-bg-primary-dark/50 dark:text-neutral-200"
+							/>
+						</div>
+					</div>
+					<div class="mt-4">
+						<label class="mb-1.5 block text-xs font-medium text-neutral-500 dark:text-neutral-400" for="contact-message">Message</label>
+						<textarea
+							id="contact-message"
+							disabled
+							rows="4"
+							placeholder="Shaken, not stirred. Signed, [redacted]."
+							class="w-full rounded-lg border border-dashed border-primary/20 bg-bg-primary/60 px-3 py-2.5 text-sm text-neutral-700 placeholder:text-neutral-400 dark:border-neutral-700 dark:bg-bg-primary-dark/50 dark:text-neutral-200"
+						></textarea>
+					</div>
+					<div class="mt-5">
+						<Button url="javascript:void(0)" type="disabled">
+							<RadioTower size={16} /> Transmit (demo only)
+						</Button>
+					</div>
+				</div>
+			</div>
+
+			<!-- Field notes -->
+			<aside class="lg:sticky lg:top-28 lg:self-start">
+				<div
+					class="-rotate-1 rounded-xl border border-dashed border-primary/25 bg-bg-secondary p-6 shadow-sm transition-transform duration-300 hover:rotate-0 dark:border-neutral-700 dark:bg-bg-secondary-dark"
+					data-aos="fade-up-xs"
+					data-aos-once="true"
+					data-aos-delay="200"
+				>
+					<div class="mb-4 flex items-center justify-between border-b border-dashed border-neutral-200 pb-4 dark:border-neutral-700">
+						<span class="text-[11px] font-medium uppercase tracking-[0.16em] text-neutral-400 dark:text-neutral-500">Field notes</span>
+						<span class="rounded bg-accent/25 px-2 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-wide text-neutral-800 dark:bg-accent/15 dark:text-accent">Memo</span>
+					</div>
+					<ul class="space-y-3 text-xs leading-relaxed text-neutral-500 dark:text-neutral-400">
+						<li class="flex gap-2"><span class="text-primary">—</span> Film pitches accepted. Fan theories graded generously.</li>
+						<li class="flex gap-2"><span class="text-primary">—</span> Corrections to the mission log are especially welcome.</li>
+						<li class="flex gap-2"><span class="text-primary">—</span> No villains. Seriously. M took that call last time.</li>
+					</ul>
+				</div>
+			</aside>
+		</div>
+	</section>
+</Layout>

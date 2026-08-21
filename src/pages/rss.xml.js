@@ -1,11 +1,12 @@
 import rss from "@astrojs/rss";
 import { getCollection } from "astro:content";
+import { siteConfig } from "@/config/site.js";
 
 export async function GET(context) {
   const blog = await getCollection('post');
   return rss({
-    title: 'Design-led Astro Starter',
-    description: 'Generic setup notes for the Design-led Astro Starter',
+    title: siteConfig.meta.title,
+    description: siteConfig.meta.description,
     site: context.site,
     items: blog.map((post) => {
       const link = `/blog/${post.id}/`;

@@ -1,7 +1,7 @@
 const SITE_URL = import.meta.env.PUBLIC_SITE_URL || "https://ricoui-astro-starter.vercel.app";
 
 export const siteConfig = {
-	title: "Paul Applegate — Post-Quantum Cryptography",
+	title: "Paul Applegate — License to Blog",
 	author: "Paul Applegate",
 	url: SITE_URL,
 	utm: {
@@ -10,11 +10,11 @@ export const siteConfig = {
 		campaign: "navigation",
 	},
 	meta: {
-		title: "Paul Applegate · PQC Engineer & Open Source Developer",
+		title: "Paul Applegate · License to Blog",
 		description:
-			"Post-quantum cryptography research, Rust systems programming, OpenPGP implementations, and open-source contributions from Charleston, SC.",
+			"Dossiers on Bond films, martinis, and other classified matters — shaken, not stirred, from Charleston, SC.",
 		keywords:
-			"post-quantum cryptography, PQC, SLH-DSA, Dilithium, XMSSMT, Sequoia-PGP, Rust, open source, cryptography",
+			"James Bond, 007, Bond films, film blog, mission log, Bond girls, villains, gadgets, Charleston",
 		image: `${SITE_URL}/assets/preview.jpg`,
 		twitterHandle: "",
 	},

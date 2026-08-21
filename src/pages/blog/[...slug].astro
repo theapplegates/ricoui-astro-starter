@@ -2,6 +2,7 @@
 import { getCollection, render } from "astro:content";
 import PostLayout from "@/layouts/PostLayout.astro";
 import Toc from '@/components/widgets/Toc.astro';
+import Badge from "@/components/ui/Badge.astro";
 
 // SSG 模式下的动态路由需要使用 getStaticPaths()
 // 来告诉 Astro 在构建时生成哪些页面
@@ -60,6 +61,14 @@ const filtered = headings.filter(h => h.depth <= 2);
 				</h1>
 
 				<!-- Metadata -->
+				{(entry.data.filmYear || entry.data.bond || entry.data.villain || entry.data.bondGirl) && (
+					<div class="mt-5 mb-5 flex flex-wrap items-center gap-2">
+						{entry.data.filmYear && <Badge variant="primary">{entry.data.filmYear}</Badge>}
+						{entry.data.bond && <Badge variant="neutral">{entry.data.bond}</Badge>}
+						{entry.data.villain && <Badge variant="error">{entry.data.villain}</Badge>}
+						{entry.data.bondGirl && <Badge variant="accent">Bond girl — {entry.data.bondGirl}</Badge>}
+					</div>
+				)}
 				<div class="article-meta text-sm text-neutral-500 dark:text-neutral-400">
 					<time datetime={entry.data.publishDate.toISOString()}>
 						{entry.data.publishDate.toLocaleDateString('en-US', {

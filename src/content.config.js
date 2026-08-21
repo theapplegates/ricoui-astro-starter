@@ -13,6 +13,11 @@ const post = defineCollection({
 		img: z.string().optional(),
 		img_alt: z.string().optional(),
 		featured: z.boolean().optional(),
+		// Bond dossier extras
+		filmYear: z.number().optional(),
+		bond: z.string().optional(),
+		villain: z.string().optional(),
+		bondGirl: z.string().optional(),
 	}),
 });
 
