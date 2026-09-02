@@ -1,4 +1,6 @@
 ---
+import CloudinaryPicture from "@/components/ui/CloudinaryPicture.astro";
+
 const { content, layout = "vertical" } = Astro.props;
 
 const {
@@ -39,11 +41,12 @@ const isHorizontal = layout === "horizontal";
   >
     <!-- Image -->
     {img ? (
-      <img
+      <CloudinaryPicture
         src={img}
         alt={img_alt || `Related to ${title}`}
+        sizes={isHorizontal ? "(min-width: 768px) 50vw, 100vw" : "(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"}
         loading="lazy"
-        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+        imgClass="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
       />
     ) : (
       <div class="w-full h-full dark:from-neutral-800 dark:to-neutral-700 flex items-center justify-center">

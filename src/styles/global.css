@@ -180,6 +180,12 @@ html.dark:not([data-theme]) {
   .font-brand{
     font-weight: 400!important;
   }
+  /* Responsive Cloudinary <picture> wrappers generate no box of their own,
+     so the inner <img> classes/styles (e.g. w-full h-full object-cover on
+     cards, article-content img borders) apply exactly as before. */
+  .responsive-picture {
+    display: contents;
+  }
   .prose {
     max-width: 65ch;
   }

@@ -1,0 +1,152 @@
+---
+/**
+ * CloudinaryPicture — responsive <picture> delivered by Cloudinary.
+ *
+ * Emits JXL → AVIF → WebP <source> elements plus a WebP <img> fallback,
+ * each with a width-based srcset. Breakpoint widths come from
+ * src/data/cloudinary-breakpoints.json (see scripts/cloudinary-breakpoints.mjs)
+ * or fall back to sane defaults. See docs/RESPONSIVE-IMAGES.md.
+ *
+ * Fallback behavior: if PUBLIC_CLOUDINARY_CLOUD_NAME is not configured, or
+ * `src` is external/SVG/GIF/data-URI, renders a plain <img> so the site
+ * works offline / before anything is uploaded.
+ */
+
+import {
+	FORMATS,
+	MIME_TYPES,
+	buildDeviceSizes,
+	buildSrcSet,
+	cloudinaryUrl,
+	getCloudName,
+	getWidths,
+	parseDevices,
+	toPublicId,
+} from "@/utils/cloudinary";
+
+interface Props {
+	/** Cloudinary public ID ("assets/blog/cover") or site path ("/assets/blog/cover.jpg"). */
+	src: string;
+	/** Required, non-empty. Write real alt text before publishing. */
+	alt: string;
+	/** Intrinsic width/height — avoids layout shift and caps the srcset. */
+	width?: number;
+	height?: number;
+	/** sizes for simple responsive mode. Ignored when `devices` is set. */
+	sizes?: string;
+	/** Comma-separated widths (overrides the recorded/default breakpoints). */
+	breakpoints?: string;
+	/** Art direction: "minWidth|vw|aspectRatio,..." — e.g. "768|70|4:3,0|100|1:1". */
+	devices?: string;
+	class?: string;
+	imgClass?: string;
+	loading?: "lazy" | "eager";
+	decoding?: "async" | "auto" | "sync";
+	fetchpriority?: "high" | "low" | "auto";
+}
+
+const {
+	src,
+	alt,
+	width,
+	height,
+	sizes,
+	breakpoints,
+	devices,
+	imgClass,
+	loading = "lazy",
+	decoding = "async",
+	fetchpriority,
+} = Astro.props;
+
+if (!alt) {
+	throw new Error(
+		`CloudinaryPicture: non-empty "alt" is required (src="${src}").`,
+	);
+}
+
+const publicId = getCloudName() ? toPublicId(src) : null;
+
+// Explicit breakpoints prop wins over recorded data.
+const explicitWidths = breakpoints
+	?.split(",")
+	.map((w) => Number(w.trim()))
+	.filter((w) => Number.isFinite(w) && w > 0);
+
+const widths = publicId
+	? explicitWidths && explicitWidths.length > 0
+		? explicitWidths
+		: getWidths(publicId, width)
+	: [];
+
+// Art direction: rows ordered largest viewport first; the browser uses the
+// first <source> whose media matches and type it supports.
+const deviceRows = devices ? parseDevices(devices) : [];
+const artRows = [...deviceRows].sort((a, b) => b.minWidth - a.minWidth);
+const fallbackRow = artRows.find((d) => d.minWidth === 0);
+
+const resolvedSizes =
+	deviceRows.length > 0
+		? buildDeviceSizes(deviceRows)
+		: sizes || "(min-width: 768px) 50vw, 100vw";
+
+// The final <img>: WebP (universal), uncropped unless art direction defines
+// a smallest-device crop.
+const imgFormat = "webp";
+const imgWidth = width ?? widths[widths.length - 1];
+const fallbackSrc = publicId
+	? cloudinaryUrl(publicId, {
+			format: imgFormat,
+			width: imgWidth,
+			aspectRatio: fallbackRow?.aspectRatio,
+		})
+	: src;
+---
+
+{
+	publicId && widths.length > 0 ? (
+		<picture class:list={["responsive-picture", Astro.props.class]}>
+			{artRows.map((row) =>
+				FORMATS.map((format) => (
+					<source
+						media={`(min-width: ${row.minWidth}px)`}
+						type={MIME_TYPES[format]}
+						srcset={buildSrcSet(publicId, format, widths, row.aspectRatio)}
+						sizes={`${row.vw}vw`}
+					/>
+				)),
+			)}
+			{/* Generic (no-media) sources — skipped when art direction's
+			    smallest row already covers every viewport */}
+			{!fallbackRow &&
+				FORMATS.map((format) => (
+					<source
+						type={MIME_TYPES[format]}
+						srcset={buildSrcSet(publicId, format, widths)}
+						sizes={resolvedSizes}
+					/>
+				))}
+			<img
+				src={fallbackSrc}
+				alt={alt}
+				width={width}
+				height={height}
+				loading={loading}
+				decoding={decoding}
+				fetchpriority={fetchpriority}
+				class={imgClass}
+			/>
+		</picture>
+	) : (
+		<img
+			src={src}
+			alt={alt}
+			width={width}
+			height={height}
+			loading={loading}
+			decoding={decoding}
+			fetchpriority={fetchpriority}
+			class={imgClass ?? Astro.props.class}
+		/>
+	)
+}

@@ -47,7 +47,7 @@ Set `defaultThemeId` in `src/config/themes.js` to choose your default, or turn t
 - Astro 7 and TypeScript
 - Tailwind CSS v4 with `@tailwindcss/vite`
 - Astro Content Layer, MDX, RSS, and sitemap
-- Sharp for local image processing
+- Cloudinary responsive images (JXL / AVIF / WebP, `<picture>` + srcset) — see `docs/RESPONSIVE-IMAGES.md`. Sharp is installed for `astro:assets` but unused.
 
 ## Quick start
 

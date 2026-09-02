@@ -28,7 +28,7 @@ Primary docs:
 | SEO | `@astrojs/sitemap`, `@astrojs/rss`, custom meta components |
 | Type checking | TypeScript, `astro check` |
 | Lint/format | Biome |
-| Images | Static assets, `sharp` |
+| Images | Cloudinary responsive pipeline (JXL/AVIF/WebP); `sharp` installed but unused — see `docs/RESPONSIVE-IMAGES.md` |
 
 The dev server is configured for port `5200` in `astro.config.mjs`.
 

@@ -4,6 +4,7 @@ import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import { fileURLToPath } from "url";
 import path from "path";
+import rehypeCloudinaryPicture from "./src/plugins/rehype-cloudinary-picture.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 // Get the site URL from environment variables, or use the default value if not set
@@ -27,6 +28,13 @@ export default defineConfig({
   server: {
     host: '127.0.0.1',
     port: 5200,
+  },
+
+  // Rewrites markdown images to Cloudinary <picture> markup at build time.
+  // @astrojs/mdx inherits markdown plugins, so one registration covers
+  // both .md and .mdx. See docs/RESPONSIVE-IMAGES.md.
+  markdown: {
+    rehypePlugins: [rehypeCloudinaryPicture],
   },
 
   integrations: [mdx(), sitemap()],
